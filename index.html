@@ -1,642 +1,72 @@
-import React, { useState } from 'react';
-import { 
-    Briefcase, MapPin, Mail, Smartphone, User, Home, Layers, Menu, X, Award, FileText, 
-    ChevronLeft, ChevronRight, Hash, Code
-} from 'lucide-react';
-
-// Main App Component
-const App = () => {
-  const [activeSection, setActiveSection] = useState('home');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  // State for managing the detailed project view modal
-  const [selectedProject, setSelectedProject] = useState(null);
-
-  // --- Configuration Data: Updated for John Bejoy PMP ---
-  
-  const photoUrl = "https://i.imgur.com/brOa2GZ_d.jpeg?maxwidth=520&shape=thumb&fidelity=high"; // <--- NEW PROFILE PICTURE ADDED HERE
-  
-  const profile = {
-    name: "JOHN BEJOY, PMP®",
-    title: "Mechanical Engineer & Project Coordinator",
-    tagline: "Certified PMP® and experienced Engineer specializing in technical drawing, project coordination, and industrial systems design.",
-    contact: {
-      location: "Nepean, ON",
-      email: "johnbejoy.ca@outlook.com",
-      phone: "647-829-1302",
-      linkedinUrl: "https://www.linkedin.com/in/john-bejoy-pmp%C2%AE-461ab31bb"
-    },
-    videoUrl: "https://www.youtube.com/embed/i0-qg81fGvI", // <<-- REPLACE THIS YOUTUBE EMBED LINK WITH YOUR OWN VIDEO!
-  };
-
-  // Restructured Experience: Core Engineering/PM Roles
-  const engineeringExperience = [
-    {
-      role: "Project Coordinator Co-op",
-      company: "Reigns 740 Inc (Residential Construction)",
-      dates: "Jan 2024 - April 2024",
-      description: [
-        "Managed and reconciled project budgets using **MS Excel**, contributing to efficiency in residential renovation projects.",
-        "Developed project schedules and **Gantt charts**, optimizing workflow and resource allocation for construction tasks.",
-        "Conducted daily site visits and coordination with teams to ensure adherence to quality, timeline, and budget.",
-      ],
-    },
-    {
-      role: "Piping Design Engineer (Expert Level)",
-      company: "Quanta Process Solutions Pvt. Ltd (Chemical Sector)",
-      dates: "Feb 2022 - Aug 2022",
-      description: [
-        "Led critical **Aveva E3D** modeling for projects like the GFL XYZ Plant, ensuring high-quality 3D piping layouts, GADs, and Isometrics.",
-        "Resolved a critical slope piping design issue for the KLP Plasticizers Plant, implementing a solution within one week after others failed.",
-        "Performed rigorous **Piping Checker** and Quality Control checks, identifying potential clashes and training new designers.",
-        "Collaborated in 30%, 60%, and 90% project review meetings with clients, adapting models and documents based on feedback."
-      ],
-    },
-    {
-      role: "Piping Design Consultant (FTC)",
-      company: "L&T Technology Services (EPC Projects)",
-      dates: "Jun 2021 - Feb 2022",
-      description: [
-        "Spearheaded Piping Support design using **AutoCAD Plant 3D** for the **Vogt Power (USA)** project, integrating designs with **Navisworks** and **Caesar II** stress analysis feedback.",
-        "Managed the **Henkel USA Caustic Dea** project, creating essential documentation like **Piping Material Specifications (PMS)** sheets and RFQs for vendor procurement.",
-        "Directed a team of 3 draftsmen in 2D drawing generation and annotation."
-      ],
-    },
-    {
-      role: "Piping Design Engineer & Team Lead",
-      company: "Assured Services (Design Agency)",
-      dates: "Sep 2019 - Jun 2020",
-      description: [
-        "Executed the **Oriental Aromatics** tank farm project: full-cycle design from site dimensioning (**AutoCAD**) to 3D modeling (**Cadworx Intergraph**).",
-        "Successfully extracted over **750 pipe isometrics**, BOM, and Piping GADs, leading a team of 4 designers for annotations and QA.",
-        "Worked as a deployment designer for **L&T Power** (NTPC Khargone FGD project) using **Aveva E3D**."
-      ],
-    }
-  ];
-
-  // Restructured Experience: Canadian Work and Student Roles
-  const otherCanadianExperience = [
-    {
-        role: "Fulfillment Associate (Part-Time)",
-        company: "Amazon (Current)",
-        dates: "Oct 2023 - Present",
-        description: "Executing precise tasks in sorting, packing, and fulfillment operations in a fast-paced logistics environment. Often tasked with **monitoring and guiding less-experienced associates** on process flow and safety procedures, ensuring **team adherence to strict metrics** and contributing to shift efficiency."
-    },
-    {
-        role: "Summer Student (Government)",
-        company: "Public and Business Delivery, North York, ON (OPS)",
-        dates: "Summer 2023 (4 months)",
-        description: "Prepared and packaged official graduate certificates/diplomas. Managed automated envelope machines, ensuring zero document mismatch to maintain strict privacy protocols."
-    },
-    {
-        role: "Security Guard",
-        company: "Neptune Security Services",
-        dates: "April 2023",
-        description: "12-hour night shift monitoring access points, maintaining security and implementing site protocols at the TTC Access gate."
-    },
-    {
-        role: "Construction Labourer",
-        company: "Renovation Projects (Windsor, ON)",
-        dates: "Short Term (4 months)",
-        description: "Performed demolition, painting, flooring, and insulation work on residential renovation projects, developing hands-on construction skills."
-    },
-    {
-        role: "Warehouse Associate",
-        company: "FedEx",
-        dates: "Oct 2022 - Jan 2023",
-        description: "Handled sorting, unloading, loading, and wrapping of packages in a high-volume warehouse setting."
-    },
-];
-
-
-  const education = [
-    {
-      degree: "Postgraduate Degree: Advanced Project Management and Strategic Leadership",
-      institution: "Lambton College",
-      dates: "Sept 2022 - June 2024"
-    },
-    {
-      degree: "Bachelor of Engineering - BE: Mechanical Engineering",
-      institution: "Gujarat Technological University (GTU)",
-      dates: "May 2018"
-    }
-  ];
-
-  const certifications = [
-    "Project Management Professional (PMP)®",
-    "Certified Associate in Project Management (CAPM)®"
-  ];
-  
-  // Detailed Projects Data
-  const designProjects = [
-    // COMBINED PROJECT (GFL XYZ & KLP Plasticizers)
-    {
-        id: 1,
-        text: "GFL XYZ Plant & KLP Plasticizers Piping Solutions",
-        role: "Piping Design Engineer (Expert Level) (Quanta Process Solutions)",
-        description: "Comprehensive 3D piping design, clash detection, and critical slope piping resolution for chemical sector clients (Gujarat Fluoride Limited and KLP Plasticizers).",
-        software: ["Aveva E3D", "Aveva PDMS", "MS Excel"],
-        achievements: [
-            "Resolved a critical slope piping design issue (KLP Plasticizers), implementing the solution within one week after others failed.",
-            "Served as the Piping Checker, ensuring all GADs and Isometrics met project specifications and quality standards (GFL XYZ Plant).",
-            "Trained and onboarded new design personnel on Aveva E3D best practices, improving team efficiency.",
-            "Successfully guided the GFL XYZ Plant project through 30%, 60%, and 90% client review stages, implementing feedback efficiently.",
-            "Leveraged advanced software knowledge to troubleshoot and solve a complex, long-standing piping issue."
-        ],
-        // Updated Images
-        images: [
-            "https://i.imgur.com/jGmG4GG.jpeg", 
-            "https://i.imgur.com/2UaAOEg.png", 
-        ]
-    },
-    // REMAINDER PROJECT 1 (Henkel USA Caustic Dea Project)
-    {
-        id: 2,
-        text: "Henkel USA Caustic Dea Project (FMCG)",
-        role: "Piping Design Consultant (L&T Technology Services)",
-        description: "Plant modification work for an existing FMCG facility, involving the integration of 3D laser scan data with new piping designs.",
-        software: ["AutoCAD Plant 3D", "Navisworks", "MS Excel"],
-        achievements: [
-            "Managed 3D modeling by precisely aligning the laser scan **Navisworks** model with new P&IDs to plan modification routes.",
-            "Authored the official **Piping Material Specification (PMS)** sheets, selecting materials based on fluid pressure and composition.",
-            "Generated RFQs and vendor documentation for new pump and instrument procurement.",
-            "Led a team of 3 draftsmen for the generation and annotation of GADs and Isometrics."
-        ],
-        images: [
-            "https://i.imgur.com/4f2DNjo.jpeg", 
-            "https://i.imgur.com/KJQPcWC.jpeg"
-        ]
-    },
-    // REMAINDER PROJECT 2 (Oriental Aromatics Tank Farm Project)
-    {
-        id: 3,
-        text: "Oriental Aromatics Tank Farm Project",
-        role: "Piping Design Engineer (Assured Services)",
-        description: "Full-cycle design of a new tank farm, from initial site survey and 2D drafting to final 3D modeling and documentation.",
-        software: ["AutoCAD", "Cadworx Intergraph"],
-        achievements: [
-            "Personally executed the site dimensioning, layout drafting, and equipment layout in **AutoCAD**.",
-            "Developed the complete 3D model in **Cadworx Intergraph** based on approved P&IDs.",
-            "Extracted over **750 pipe isometrics**, Bill of Materials (BOM), and Piping General Arrangement Drawings (GADs).",
-            "Supervised a team of 4 designers for the QA/QC and annotation phase of 2D deliverables."
-        ],
-        images: [
-            "https://i.imgur.com/moPnu1K.png", 
-            "https://i.imgur.com/oCjNyqG.png",
-        ]
-    },
-  ];
-
-  const skills = {
-    technical: ["Piping Design (3D & 2D)", "AutoCAD", "Aveva E3D", "AutoCAD Plant 3D", "Cadworx Intergraph", "Piping & Mechanical Systems", "Navisworks", "Caesar II (Stress Feedback)", "P&ID Interpretation", "Piping Material Specification (PMS)"],
-    professional: ["PMP Certified", "Project Coordination & Scheduling", "Team Leadership (4 Designers)", "Quality Control & Checking", "Clash Detection & Risk Mitigation", "Vendor RFQ Documentation", "Process Improvement", "Privacy Compliance (Govt. work)"],
-    software: ["MS Excel (Budgeting/BOM)", "MS Word", "MS Project (Gantt Charts)", "Jira", "Adobe Acrobat", "Outlook"],
-    other: ["Regulatory Compliance", "Safety Procedures", "Construction Labour", "Logistics & Fulfillment"]
-  };
-  
-  // SVG for LinkedIn icon
-  const LinkedInIcon = () => (
-    <svg className="h-6 w-6 text-gray-700 hover:text-sky-600 transition-colors duration-200" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.761 0-.971.784-1.76 1.75-1.76s1.75.789 1.75 1.76c0 .971-.784 1.761-1.75 1.761zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.71 7 2.285v6.95zm0 0"></path>
-    </svg>
-  );
-
-  // --- Utility Functions and Components ---
-
-  // Utility function to convert **text** to <strong>text</strong> for rendering bold text
-  const formatMarkdown = (text) => {
-      // Regex to find content between double asterisks and replace with strong tags
-      const htmlText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      return { __html: htmlText };
-  };
-
-  const SectionLink = ({ target, icon: Icon, label }) => (
-    <button
-      onClick={() => {
-        setActiveSection(target);
-        setIsMenuOpen(false);
-      }}
-      className={`flex items-center space-x-3 p-3 text-sm font-medium transition-all duration-200 rounded-lg w-full text-left ${
-        activeSection === target
-          ? 'bg-sky-600 text-white shadow-lg'
-          : 'text-gray-700 hover:bg-gray-100 hover:text-sky-700'
-      }`}
-    >
-      <Icon className="w-5 h-5" />
-      <span>{label}</span>
-    </button>
-  );
-
-  const SectionTitle = ({ icon: Icon, title }) => (
-    <h2 className="flex items-center text-2xl font-bold text-gray-800 border-b-2 border-sky-400 pb-2 mb-6">
-      <Icon className="w-6 h-6 mr-3 text-sky-500" />
-      {title}
-    </h2>
-  );
-
-  // Project Detail Modal Component
-  const ProjectDetailModal = ({ project, onClose }) => {
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    const nextImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex + 1) % project.images.length);
-    };
-
-    const prevImage = () => {
-        setCurrentImageIndex((prevIndex) => (prevIndex - 1 + project.images.length) % project.images.length);
-    };
-
-    if (!project) return null;
-
-    const currentImage = project.images[currentImageIndex];
-
-    return (
-        // Modal width increased to max-w-6xl for bigger images
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-90 z-50 overflow-y-auto p-4 flex items-start justify-center" onClick={onClose}>
-            <div 
-                className="bg-white rounded-xl shadow-2xl max-w-6xl w-full my-8 transform transition-all duration-300 scale-100" 
-                onClick={(e) => e.stopPropagation()} // Prevent closing on modal content click
-            >
-                <header className="flex justify-between items-center p-6 border-b border-gray-100 bg-sky-50 rounded-t-xl">
-                    <h2 className="text-3xl font-extrabold text-gray-900">{project.text}</h2>
-                    <button 
-                        onClick={onClose} 
-                        className="p-2 text-gray-500 hover:text-sky-600 transition duration-150 rounded-full hover:bg-white"
-                        aria-label="Close Project Details"
-                    >
-                        <X className="w-6 h-6" />
-                    </button>
-                </header>
-                
-                <div className="p-6 space-y-8">
-                    {/* Image Gallery/Carousel - Uniform aspect-video size */}
-                    {project.images && project.images.length > 0 && (
-                        <div className="relative bg-gray-200 rounded-lg overflow-hidden shadow-lg aspect-video">
-                            <img 
-                                src={currentImage} 
-                                alt={`${project.text} - View ${currentImageIndex + 1}`}
-                                className="w-full h-full object-contain"
-                                onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/1000x562/cccccc/333333?text=Design+View"; }}
-                            />
-                            <div className="absolute inset-0 flex items-center justify-between p-2">
-                                <button 
-                                    onClick={prevImage} 
-                                    className="p-2 bg-black bg-opacity-40 text-white rounded-full hover:bg-opacity-60 transition"
-                                >
-                                    <ChevronLeft className="w-6 h-6" />
-                                </button>
-                                <button 
-                                    onClick={nextImage} 
-                                    className="p-2 bg-black bg-opacity-40 text-white rounded-full hover:bg-opacity-60 transition"
-                                >
-                                    <ChevronRight className="w-6 h-6" />
-                                </button>
-                            </div>
-                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-sm text-white bg-black bg-opacity-50 px-3 py-1 rounded-full">
-                                {currentImageIndex + 1} / {project.images.length}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Project Details */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="col-span-1">
-                            <h3 className="text-lg font-bold text-sky-700 flex items-center mb-2"><Briefcase className="w-5 h-5 mr-2"/> Role & Client</h3>
-                            <p className="text-gray-800 font-semibold">{project.role}</p>
-                        </div>
-                        <div className="col-span-2">
-                            <h3 className="text-lg font-bold text-sky-700 flex items-center mb-2"><FileText className="w-5 h-5 mr-2"/> Project Summary</h3>
-                            <p className="text-gray-700">{project.description}</p>
-                        </div>
-                    </div>
-
-                    <div className="mt-6">
-                        <h3 className="text-lg font-bold text-sky-700 flex items-center mb-3"><Code className="w-5 h-5 mr-2"/> Key Software & Tools</h3>
-                        <div className="flex flex-wrap gap-2">
-                            {project.software.map(tool => (
-                                <span key={tool} className="px-3 py-1 text-sm bg-sky-100 text-sky-800 font-medium rounded-full shadow-sm border border-sky-200">
-                                    {tool}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="mt-6">
-                        <h3 className="text-lg font-bold text-sky-700 flex items-center mb-3"><Award className="w-5 h-5 mr-2"/> Key Achievements & Responsibilities</h3>
-                        <ul className="space-y-3 list-inside text-gray-700">
-                            {project.achievements.map((ach, index) => (
-                                <li key={index} className="flex items-start text-sm">
-                                    <Hash className="w-4 h-4 mt-1 mr-2 text-sky-500 flex-shrink-0"/>
-                                    {/* Using formatMarkdown to render bold text */}
-                                    <span dangerouslySetInnerHTML={formatMarkdown(ach)} />
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-
-                <footer className="p-4 border-t text-right">
-                    <button 
-                        onClick={onClose} 
-                        className="px-6 py-2 bg-sky-600 text-white rounded-lg hover:bg-sky-700 transition duration-150 font-medium shadow-md"
-                    >
-                        Close Details
-                    </button>
-                </footer>
-            </div>
-        </div>
-    );
-  };
-
-
-  // --- Section Components ---
-  const HomeSection = () => (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row items-center space-y-6 md:space-y-0 md:space-x-8 p-6 bg-white rounded-xl shadow-lg border-t-4 border-sky-500">
-        <img
-          src={photoUrl}
-          alt={profile.name}
-          className="w-36 h-36 rounded-full object-cover shadow-xl border-4 border-white ring-4 ring-sky-200"
-          onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/144x144/06b6d4/ffffff?text=JB"; }}
-        />
-        <div className="text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start space-x-3">
-             <h1 className="text-4xl font-extrabold text-gray-900 leading-tight">{profile.name}</h1>
-             {profile.contact.linkedinUrl && (
-                <a href={profile.contact.linkedinUrl} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
-                    <LinkedInIcon />
-                </a>
-            )}
-          </div>
-          <h2 className="text-2xl font-semibold text-sky-600 mt-1">{profile.title}</h2>
-          <p className="text-gray-500 mt-2 italic">{profile.tagline}</p>
-        </div>
-      </div>
-
-      {/* Contact Info */}
-      <div className="bg-white p-6 rounded-xl shadow-lg">
-        <SectionTitle icon={Home} title="Contact Information" />
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-gray-700">
-          <div className="flex items-center space-x-3">
-            <MapPin className="w-5 h-5 text-sky-500 flex-shrink-0" />
-            <p>{profile.contact.location}</p>
-            </div>
-          <div className="flex items-center space-x-3">
-            <Mail className="w-5 h-5 text-sky-500 flex-shrink-0" />
-            <a href={`mailto:${profile.contact.email}`} className="hover:text-sky-700 transition duration-150">{profile.contact.email}</a>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Smartphone className="w-5 h-5 text-sky-500 flex-shrink-0" />
-            <a href={`tel:${profile.contact.phone}`} className="hover:text-sky-700 transition duration-150">{profile.contact.phone}</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const AboutSection = () => (
-    <div className="bg-white p-6 rounded-xl shadow-lg space-y-8">
-      {/* Video Introduction */}
-      <SectionTitle icon={User} title="Video Introduction" />
-      
-      {profile.videoUrl ? (
-        <div className="relative pt-[56.25%] rounded-xl overflow-hidden shadow-xl ring-4 ring-sky-200"> 
-            <iframe 
-                className="absolute top-0 left-0 w-full h-full"
-                src={profile.videoUrl} 
-                title="Professional Video Introduction" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-            ></iframe>
-        </div>
-      ) : (
-        <div className="p-6 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800 rounded-md">
-            <p className="font-semibold">Video Placeholder:</p>
-            <p>Please update the <code className="font-mono text-sm">videoUrl</code> in the <code className="font-mono text-sm">profile</code> object with the embed link for your introduction video.</p>
-        </div>
-      )}
-
-      {/* Skills */}
-      <SectionTitle icon={FileText} title="Technical and Professional Skills" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-        {Object.entries(skills).map(([category, list]) => (
-          <div key={category} className="bg-sky-50 p-4 rounded-lg shadow-inner">
-            <h3 className="text-lg font-bold capitalize text-sky-800 mb-3 border-b border-sky-300 pb-1">
-              {category.replace('s', ' Skills')}
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {list.map((skill) => (
-                <span
-                  key={skill}
-                  className="px-3 py-1 text-sm bg-white text-sky-700 border border-sky-200 rounded-full font-medium transition duration-150 hover:bg-sky-100 shadow-sm"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const ExperienceSection = () => (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-      <SectionTitle icon={Briefcase} title="Core Engineering & Project Management Experience (Timeline)" />
-      
-      {/* Timeline Layout */}
-      <div className="relative space-y-8">
-        <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-sky-200 md:left-5"></div> 
-
-        {engineeringExperience.map((job, index) => (
-          <div key={index} className="relative pl-8 md:pl-12 group">
-            {/* Timeline Dot/Marker */}
-            <div className="absolute left-0 top-1 w-6 h-6 md:w-8 md:h-8 bg-sky-500 rounded-full ring-4 ring-white shadow-md flex items-center justify-center text-white font-bold text-xs">
-                {engineeringExperience.length - index}
-            </div>
-
-            <div className="p-4 bg-gray-50 rounded-lg shadow-sm hover:shadow-lg transition duration-300 ml-2 border border-sky-100">
-                <p className="text-sm font-semibold text-sky-600 mb-1">{job.dates}</p>
-                <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 leading-snug">{job.role}</h3>
-                <h4 className="text-md md:text-lg font-semibold text-gray-700 mb-3 border-b pb-1">{job.company}</h4>
-                <ul className="space-y-2 list-disc list-inside text-gray-700">
-                {job.description.map((desc, i) => (
-                    <li 
-                        key={i} 
-                        className="ml-4 text-sm"
-                        // Applying the markdown function here
-                        dangerouslySetInnerHTML={formatMarkdown(desc)} 
-                    />
-                ))}
-                </ul>
-            </div>
-            </div>
-        ))}
-      </div>
-
-      <div className="mt-12">
-        <SectionTitle icon={MapPin} title="Canadian Work Experience (Adaptability)" />
-        <div className="space-y-6">
-            {otherCanadianExperience.map((job, index) => (
-                <div key={index} className="pl-6 border-l-2 border-gray-200">
-                    <h3 className="text-lg font-bold text-gray-800">{job.role} ({job.dates})</h3>
-                    <p className="text-sm text-gray-600">{job.company}</p>
-                    {/* Applying the markdown function here */}
-                    <p 
-                        className="text-sm text-gray-700 mt-1 italic"
-                        dangerouslySetInnerHTML={formatMarkdown(job.description)}
-                    />
-                </div>
-            ))}
-        </div>
-      </div>
-
-
-      <div className="mt-12">
-        <SectionTitle icon={Award} title="Education & Certifications" />
-        <div className="space-y-6 mb-8">
-          {education.map((edu, index) => (
-            <div key={index} className="relative pl-6 border-l-2 border-sky-200 group">
-                <div className="absolute -left-2 top-0 w-4 h-4 bg-sky-500 rounded-full ring-8 ring-sky-100 group-hover:bg-sky-600 transition duration-300"></div>
-              <h3 className="text-lg font-bold text-gray-900">{edu.degree}</h3>
-              <p className="text-md font-semibold text-sky-600">{edu.institution}</p>
-              <p className="text-sm text-gray-500">{edu.dates}</p>
-            </div>
-          ))}
-        </div>
-        
-        <h3 className="text-lg font-bold text-gray-800 mb-3">Professional Certifications</h3>
-        <div className="flex flex-wrap gap-3">
-            {certifications.map((cert, index) => (
-                <span key={index} className="bg-orange-100 text-orange-800 text-sm font-semibold px-4 py-2 rounded-full shadow-sm">
-                    {cert}
-                </span>
-            ))}
-        </div>
-
-      </div>
-    </div>
-  );
-
-  const ProjectsSection = () => (
-    <div className="bg-white p-6 rounded-xl shadow-lg">
-        {/* Updated Section Title */}
-        <SectionTitle icon={Layers} title="Project Deep Dive (Timeline View)" />
-        <p className="text-gray-700 leading-relaxed mb-8 border-b pb-4">
-            A chronological breakdown of key piping design and engineering projects. Click on any project below to view detailed scope, software used, and key professional achievements.
-        </p>
-        
-        {/* Timeline Layout for Projects */}
-        <div className="relative space-y-10">
-            {/* Vertical line for the timeline */}
-            <div className="absolute left-3 top-0 bottom-0 w-0.5 bg-sky-200 md:left-5"></div> 
-
-            {designProjects.map((project, index) => (
-                <div key={project.id} className="relative pl-8 md:pl-12 group">
-                    {/* Timeline Dot/Marker - Using index for numbering/visual */}
-                    <div className="absolute left-0 top-1 w-6 h-6 md:w-8 md:h-8 bg-sky-500 rounded-full ring-4 ring-white shadow-md flex items-center justify-center text-white font-bold text-xs">
-                        {designProjects.length - index}
-                    </div>
-
-                    <button 
-                        onClick={() => setSelectedProject(project)}
-                        className="w-full text-left focus:outline-none focus:ring-4 focus:ring-sky-300 rounded-xl transition duration-200 ml-2"
-                    >
-                        {/* Project Card Content */}
-                        <div className="bg-gray-50 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 group-hover:border-sky-400 overflow-hidden">
-                            
-                            {/* Larger image preview */}
-                            <div className="w-full aspect-video overflow-hidden border-b border-gray-200">
-                                <img 
-                                    src={project.images[0]} 
-                                    alt={`${project.text} example`} 
-                                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
-                                    onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/400x225/cccccc/333333?text=Design+Preview"; }}
-                                />
-                            </div>
-
-                            <div className="p-5">
-                                <h3 className="text-2xl font-extrabold text-gray-800 group-hover:text-sky-600 transition-colors leading-snug">{project.text}</h3>
-                                <p className="text-md font-semibold text-gray-600 mt-1">{project.role}</p>
-                                <p className="text-gray-700 text-sm mt-3">{project.description}</p>
-                            </div>
-                            
-                            <div className="flex justify-end p-4 border-t border-gray-100">
-                                <span className="text-sm font-semibold text-sky-600 group-hover:text-sky-800 transition">
-                                    View Detailed Achievements & Software →
-                                </span>
-                            </div>
-                        </div>
-                    </button>
-                </div>
-            ))}
-        </div>
-    </div>
-  );
-
-
-  const renderSection = () => {
-    switch (activeSection) {
-      case 'home':
-        return <HomeSection />;
-      case 'about':
-        return <AboutSection />;
-      case 'experience':
-        return <ExperienceSection />;
-      case 'projects':
-        return <ProjectsSection />;
-      default:
-        return <HomeSection />;
-    }
-  };
-
-  // --- Main Layout ---
-  return (
-    <div className="min-h-screen bg-gray-100 p-4 sm:p-8 font-sans antialiased">
-      <style>{`
-        /* Global font for clean modern look */
-        body {
-          font-family: 'Inter', sans-serif;
-        }
-      `}</style>
-      
-      {/* Mobile Menu Button */}
-      <div className="fixed top-4 right-4 z-50 md:hidden">
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="p-3 bg-sky-600 text-white rounded-full shadow-lg hover:bg-sky-700 transition duration-200"
-        >
-          {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-        </button>
-      </div>
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-8">
-        {/* Sidebar/Navigation */}
-        <nav className={`fixed inset-y-0 left-0 transform ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0 transition-transform duration-300 ease-in-out bg-white p-6 shadow-2xl md:shadow-xl md:rounded-xl z-40 w-64 md:w-auto h-full md:h-auto`}>
-          <div className="sticky top-8 space-y-4">
-            <h2 className="text-xl font-bold text-gray-800 hidden md:block border-b pb-2 mb-4">Portfolio Navigator</h2>
-            <SectionLink target="home" icon={Home} label="Profile & Contact" />
-            <SectionLink target="about" icon={User} label="Video Introduction & Skills" />
-            <SectionLink target="experience" icon={Briefcase} label="Experience & Education" />
-            <SectionLink target="projects" icon={Layers} label="Project Deep Dive" />
-          </div>
-        </nav>
-
-        {/* Main Content Area */}
-        <main className="md:col-span-3 lg:col-span-4 min-h-[80vh] pt-16 md:pt-0"> {/* pt-16 added for mobile header gap */}
-            {renderSection()}
-        </main>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>John Bejoy, PMP® — Project Manager · Mechanical Engineer · Designer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <a href="index.html" class="flex items-center space-x-3">
+          <img src="assets/profile.jpg" alt="John Bejoy" class="w-10 h-10 rounded-full object-cover border-2 border-sky-200" />
+          <div class="text-sm">
+            <div class="font-bold text-gray-900">JOHN BEJOY, PMP®</div>
+            <div class="text-xs text-sky-600">Project Manager · Mechanical Engineer · Designer</div>
+          </div>
+        </a>
+        <nav class="hidden md:flex items-center space-x-4">
+          <a class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" href="index.html">Home</a>
+          <a class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" href="experience.html">Experience</a>
+          <a class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" href="projects.html">Projects</a>
+          <a class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" href="education.html">Education</a>
+          <a class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100" href="contact.html">Contact</a>
+        </nav>
+        <div class="md:hidden">
+          <button id="mobile-open" class="p-2 bg-sky-600 text-white rounded-full">Menu</button>
+        </div>
       </div>
-
-      {/* Project Detail Modal - Renders only when a project is selected */}
-      {selectedProject && (
-          <ProjectDetailModal 
-            project={selectedProject} 
-            onClose={() => setSelectedProject(null)} 
-          />
-      )}
     </div>
-  );
-};
+  </header>
 
-export default App;
+  <main class="max-w-7xl mx-auto p-6">
+    <section class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-sky-500">
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+        <img src="assets/profile.jpg" alt="John Bejoy" class="w-36 h-36 rounded-full object-cover shadow-xl border-4 border-white ring-4 ring-sky-200" />
+        <div class="flex-1 text-center md:text-left">
+          <div class="flex items-center justify-center md:justify-start gap-3">
+            <h1 class="text-4xl font-extrabold text-gray-900">JOHN BEJOY, PMP®</h1>
+            <a href="https://www.linkedin.com/in/john-bejoy-pmp%C2%AE-461ab31bb" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+              <svg class="w-6 h-6 text-gray-700 hover:text-sky-600" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.761 0-.971.784-1.76 1.75-1.76s1.75.789 1.75 1.76c0 .971-.784 1.761-1.75 1.761zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.71 7 2.285v6.95z"/></svg>
+            </a>
+          </div>
+          <h2 class="text-2xl font-semibold text-sky-600 mt-1">Project manager · Mechanical Engineer · Designer</h2>
+          <p class="text-gray-500 mt-3 italic">Certified PMP® and experienced Engineer specializing in technical drawing, project coordination, and industrial systems design.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mt-6 bg-white p-6 rounded-xl shadow-lg">
+      <h3 class="text-xl font-bold text-gray-800 mb-4">Contact Information</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-gray-700">
+        <div class="flex items-center space-x-3"><svg class="w-5 h-5 text-sky-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C8.686 2 6 4.686 6 8c0 6 6 12 6 12s6-6 6-12c0-3.314-2.686-6-6-6z"/></svg><span>Nepean, ON</span></div>
+        <div class="flex items-center space-x-3"><svg class="w-5 h-5 text-sky-500" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zM4 8l8 5 8-5v2l-8 5-8-5V8z"/></svg><a href="mailto:johnbejoy.ca@outlook.com" class="hover:text-sky-700">johnbejoy.ca@outlook.com</a></div>
+        <div class="flex items-center space-x-3"><svg class="w-5 h-5 text-sky-500" fill="currentColor" viewBox="0 0 24 24"><path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.72 11.72 0 003.68.59 1 1 0 011 1V20a1 1 0 01-1 1C9.39 21 3 14.61 3 6a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.48.62 3.79z"/></svg><a href="tel:647-829-1302" class="hover:text-sky-700">647-829-1302</a></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="max-w-7xl mx-auto p-6 text-center text-sm text-gray-600">
+    © John Bejoy — Project Manager · Mechanical Engineer · Designer
+  </footer>
+
+  <script>
+    document.getElementById('mobile-open').addEventListener('click', function(){
+      alert('Use the top navigation links to move between pages on mobile. (This is a simple static build)');
+    });
+  </script>
+</body>
+</html>
